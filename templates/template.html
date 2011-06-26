@@ -23,6 +23,8 @@
                 // Instead of plugging in the values manually, or reading them
                 // from a Data Source like Google Spreadsheets, feed them in
                 // using Jinja, the templating system Flask uses.
+                // Each iteration evaluates to something like this:
+                // ['Saturday', 28],
                 {%- for dayname, num in data %}
                 ['{{ dayname }}', {{ num }}],
                 {%- endfor %}
