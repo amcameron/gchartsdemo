@@ -1,0 +1,67 @@
+<!doctype html>
+<head>
+    <title>Google Charts with Flask</title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    
+      // Load the Visualization API and the ColumnChart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+      
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      
+      // Callback that creates and populates a data table, 
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create our data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Day');
+        data.addColumn('number', 'Number of frobnications');
+        data.addRows([
+                // Instead of plugging in the values manually, or reading them
+                // from a Data Source like Google Spreadsheets, feed them in
+                // using Jinja, the templating system Flask uses.
+                {%- for dayname, num in data %}
+                ['{{ dayname }}', {{ num }}],
+                {%- endfor %}
+        ]);
+
+        // Instantiate and draw our chart, passing in some options.  All the
+        // options go into a single {}; some options' values go into a nested
+        // {}. Some values, such as colors, must be given as strings.  The
+        // Google Charts API is well-documented.
+        var chart = new google.visualization.ColumnChart(
+                document.getElementById('chart_div'));
+        chart.draw(data, {legend: 'none', vAxis: {baseline: 0},
+                colors: ['#A0D100']});
+      }
+    </script>
+
+    <style>
+        #content {
+            width: 80%;
+            height: 60%;
+            min-width: 800px;
+
+            /* Center the div. */
+            margin-right: auto;
+            margin-left: auto;
+
+            color: #A0D100;
+            text-align: center;
+        }
+
+        #chart_div {
+            min-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include more content here or below the chart, using Flask / Jinja. -->
+    <div id="content">
+        <h1>Foobars frobnicated in the past 7 days</h1>
+        <div id="chart_div"></div>
+    </div>
+</body>
